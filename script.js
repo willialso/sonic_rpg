@@ -104,12 +104,30 @@ class GameEngine {
     }
 
     showStartScreen() {
-        document.getElementById('start-screen').classList.remove('hidden');
+        // Hide all screens first
         document.getElementById('game-over-screen').classList.add('hidden');
+        document.getElementById('game-over-screen').style.display = 'none';
+        
+        // Show start screen
+        const startScreen = document.getElementById('start-screen');
+        startScreen.classList.remove('hidden');
+        startScreen.style.display = 'flex';
+        startScreen.style.visibility = 'visible';
         
         // Hide FAB menu on welcome screen
         const fabMenu = document.getElementById('floating-action-menu');
         fabMenu.style.display = 'none';
+        
+        // Hide dialogue container
+        const dialogueContainer = document.getElementById('dialogue-container');
+        dialogueContainer.classList.add('hidden');
+        
+        // Clear any speech bubbles
+        this.clearSpeechBubbles();
+        
+        // Clear action bubbles
+        const actionBubbles = document.getElementById('action-bubbles');
+        actionBubbles.innerHTML = '';
         
         // Show Console University image on start screen
         const sceneImage = document.getElementById('scene-image');
@@ -117,6 +135,7 @@ class GameEngine {
         if (startLocation && startLocation.image) {
             sceneImage.src = startLocation.image;
             sceneImage.alt = startLocation.name;
+            sceneImage.style.opacity = '1';
             sceneImage.onerror = () => {
                 sceneImage.src = '';
                 sceneImage.alt = startLocation.name;
@@ -146,6 +165,11 @@ class GameEngine {
         // Hide any NPC portraits when changing locations
         this.hideNPCPortrait();
         
+        // Make sure start screen is hidden
+        const startScreen = document.getElementById('start-screen');
+        startScreen.classList.add('hidden');
+        startScreen.style.display = 'none';
+        
         this.currentLocation = locationId;
         const location = this.gameData.game.locations[locationId];
         
@@ -171,6 +195,7 @@ class GameEngine {
             // Force reload by adding timestamp to prevent caching issues
             sceneImage.src = location.image + '?t=' + Date.now();
             sceneImage.alt = location.name;
+            sceneImage.style.opacity = '1';
             sceneContainer.classList.add('showing-scene');
             sceneContainer.classList.remove('showing-portrait');
             
@@ -644,6 +669,7 @@ class GameEngine {
         } else if (this.currentNPC === 'earthworm_jim') {
             // Jim's simplified flow - whatever user says, Jim responds with default response
             const sceneImage = document.getElementById('scene-image');
+            // Make sure Jim2 is shown (don't switch to quad yet)
             sceneImage.src = 'assets/images/JIM2.png';
             
             // Show Jim's response
@@ -651,12 +677,23 @@ class GameEngine {
             
             setTimeout(() => {
                 this.cancelDialogue();
-                // Jim exits - remove from location
-                const location = this.gameData.game.locations[this.currentLocation];
-                if (location.npc === 'earthworm_jim') {
-                    delete location.npc;
-                    this.updateFABMenu(location);
-                }
+                // Fade out Jim image, then show quad
+                sceneImage.style.transition = 'opacity 0.5s ease-out';
+                sceneImage.style.opacity = '0';
+                setTimeout(() => {
+                    // Switch to quad image
+                    sceneImage.src = 'assets/images/Quad1.png';
+                    sceneImage.style.opacity = '1';
+                    sceneImage.style.transition = '';
+                    
+                    // Jim exits - remove from location
+                    const location = this.gameData.game.locations[this.currentLocation];
+                    if (location.npc === 'earthworm_jim') {
+                        delete location.npc;
+                        // Update FAB menu to show only "Go to Frat" and "Keep Walking"
+                        this.updateFABMenu(location);
+                    }
+                }, 500);
             }, 3000);
         }
     }

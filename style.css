@@ -28,7 +28,7 @@
 
 body {
     font-family: 'Comic Sans MS', 'Comic Neue', cursive, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--bg-dark);
+    background: #000; /* Black background instead of purple */
     color: var(--text-primary);
     overflow: auto;
     overflow-x: hidden;
@@ -39,6 +39,11 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure game container starts with black background */
+#game-container {
+    background: #000;
 }
 
 #game-container {
