@@ -642,127 +642,22 @@ class GameEngine {
                 }, 2000);
             }
         } else if (this.currentNPC === 'earthworm_jim') {
-            // Check for insults/mean responses
-            const meanWords = ['stupid', 'idiot', 'dumb', 'suck', 'hate', 'screw', 'damn', 'hell', 'ass', 'jerk', 'weird', 'gross'];
-            const isMean = meanWords.some(word => textLower.includes(word));
-
-            if (isMean) {
-                // Mean response - use Jim3 image, Jim exits
-                const sceneImage = document.getElementById('scene-image');
-                sceneImage.src = 'assets/images/JIM3.png';
-                this.showSpeechBubble('Earthworm Jim', npc.responses.mean + ' *under his breath* Psycho', 'left');
-                setTimeout(() => {
-                    this.cancelDialogue();
-                    // Jim exits - remove from location
-                    const location = this.gameData.game.locations[this.currentLocation];
-                    if (location.npc === 'earthworm_jim') {
-                        delete location.npc;
-                        this.updateFABMenu(location);
-                    }
-                }, 3000);
-                return;
-            }
-
-            // Check if asking about sonic/stadium/mission
-            const relevantKeywords = ['sonic', 'stadium', 'championship', 'mission', 'help', 'how', 'what', 'need', 'do', 'get'];
-            const isRelevant = relevantKeywords.some(keyword => textLower.includes(keyword));
-
-            if (isRelevant && !state.jimQuestionAnswered) {
-                // Good question - use Jim2 image
-                const sceneImage = document.getElementById('scene-image');
-                sceneImage.src = 'assets/images/JIM2.png';
-                
-                if (textLower.includes('what') || (textLower.includes('need') && textLower.includes('do')) || 
-                    textLower.includes('how') || textLower.includes('help')) {
-                    // Asking what they need to do
-                    setTimeout(() => {
-                        this.showSpeechBubble('Earthworm Jim', npc.responses.question_about_sonic, 'left');
-                        setTimeout(() => {
-                            this.showSpeechBubble('Earthworm Jim', npc.responses.what_do_i_need, 'left');
-                        }, 2500);
-                    }, 500);
-                } else {
-                    // Asking about sonic/stadium
-                    this.showSpeechBubble('Earthworm Jim', npc.responses.question_about_sonic, 'left');
-                    setTimeout(() => {
-                        this.showSpeechBubble('Earthworm Jim', npc.responses.what_do_i_need, 'left');
-                    }, 2500);
+            // Jim's simplified flow - whatever user says, Jim responds with default response
+            const sceneImage = document.getElementById('scene-image');
+            sceneImage.src = 'assets/images/JIM2.png';
+            
+            // Show Jim's response
+            this.showSpeechBubble('Earthworm Jim', npc.defaultResponse || 'Uh yeah I was just being nice but why don\'t you check out the frat.', 'left');
+            
+            setTimeout(() => {
+                this.cancelDialogue();
+                // Jim exits - remove from location
+                const location = this.gameData.game.locations[this.currentLocation];
+                if (location.npc === 'earthworm_jim') {
+                    delete location.npc;
+                    this.updateFABMenu(location);
                 }
-            } else if (textLower.includes('315') || text === '315' || textLower === 'three fifteen' || 
-                       textLower === 'three-fifteen' || textLower === '3:15' || textLower === '3 15' ||
-                       textLower.includes('three fifteen') || textLower.includes('3 fifteen')) {
-                // Correct answer - use Jim1 image, show combined message, then Jim exits
-                const sceneImage = document.getElementById('scene-image');
-                sceneImage.src = 'assets/images/Jim1.png';
-                state.jimQuestionAnswered = true;
-                // Show combined message directly (skip the first "sonic sleeping one off")
-                this.showSpeechBubble('Earthworm Jim', 'Sonic is Sleeping on off, I gotta go late for the tickle fight!', 'left');
-                setTimeout(() => {
-                    this.cancelDialogue();
-                    // Fade out Jim image
-                    sceneImage.style.opacity = '0';
-                    setTimeout(() => {
-                        // Switch back to quad image
-                        sceneImage.src = 'assets/images/Quad1.png';
-                        // Wait for image to load, then fade in
-                        sceneImage.onload = () => {
-                            sceneImage.style.opacity = '1';
-                        };
-                        // Fallback if image is cached
-                        if (sceneImage.complete) {
-                            sceneImage.style.opacity = '1';
-                        }
-                        // Jim exits - remove from location
-                        const location = this.gameData.game.locations[this.currentLocation];
-                        if (location.npc === 'earthworm_jim') {
-                            delete location.npc;
-                            this.updateFABMenu(location);
-                        }
-                    }, 500);
-                }, 3000);
-            } else if (state.jimWrongAnswers < 2 && (textLower.match(/\d+/) || textLower.includes('time') || textLower.includes('pm') || textLower.includes('am'))) {
-                // Wrong answer (but looks like a time) - keep current image
-                state.jimWrongAnswers++;
-                const responseKey = `wrong_answer_${state.jimWrongAnswers}`;
-                setTimeout(() => {
-                    this.showSpeechBubble('Earthworm Jim', npc.responses[responseKey] || npc.responses.wrong_answer_1, 'left');
-                }, 500);
-            } else if (state.jimWrongAnswers >= 2 && (textLower.match(/\d+/) || textLower.includes('time'))) {
-                // Third wrong answer - use Jim3 image, Jim exits
-                const sceneImage = document.getElementById('scene-image');
-                sceneImage.src = 'assets/images/JIM3.png';
-                setTimeout(() => {
-                    this.showSpeechBubble('Earthworm Jim', npc.responses.wrong_answer_3, 'left');
-                    setTimeout(() => {
-                        this.cancelDialogue();
-                        // Jim exits - remove from location
-                        const location = this.gameData.game.locations[this.currentLocation];
-                        if (location.npc === 'earthworm_jim') {
-                            delete location.npc;
-                            this.updateFABMenu(location);
-                        }
-                    }, 3000);
-                }, 500);
-            } else if (!state.jimQuestionAnswered) {
-                // Bad/irrelevant response - use Jim3 image, Jim exits
-                const sceneImage = document.getElementById('scene-image');
-                sceneImage.src = 'assets/images/JIM3.png';
-                setTimeout(() => {
-                    this.showSpeechBubble('Earthworm Jim', npc.responses.irrelevant + ' *under his breath* Psycho', 'left');
-                    setTimeout(() => {
-                        this.cancelDialogue();
-                        // Jim exits - remove from location
-                        const location = this.gameData.game.locations[this.currentLocation];
-                        if (location.npc === 'earthworm_jim') {
-                            delete location.npc;
-                            this.updateFABMenu(location);
-                        }
-                    }, 3000);
-                }, 500);
-            } else {
-                // General response after question answered
-                this.showSpeechBubble('Earthworm Jim', 'Yeah, good luck with that.', 'left');
-            }
+            }, 3000);
         }
     }
 
