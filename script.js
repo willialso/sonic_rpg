@@ -943,10 +943,31 @@ class GameEngine {
         // Show carback.png image for expelled/dropped out
         const sceneImage = document.getElementById('scene-image');
         sceneImage.src = 'assets/images/carback.png';
+        sceneImage.style.opacity = '1';
+        
+        // Hide start screen if visible
+        const startScreen = document.getElementById('start-screen');
+        startScreen.classList.add('hidden');
+        startScreen.style.display = 'none';
+        
+        // Hide dialogue container
+        const dialogueContainer = document.getElementById('dialogue-container');
+        dialogueContainer.classList.add('hidden');
+        
+        // Hide FAB menu
+        const fabMenu = document.getElementById('floating-action-menu');
+        fabMenu.style.display = 'none';
+        
+        // Clear speech bubbles
+        this.clearSpeechBubbles();
+        
+        // Show game over screen
+        const gameOverScreen = document.getElementById('game-over-screen');
+        gameOverScreen.classList.remove('hidden');
+        gameOverScreen.style.display = 'flex';
         
         document.getElementById('game-over-title').textContent = title;
         document.getElementById('game-over-message').textContent = message;
-        document.getElementById('game-over-screen').classList.remove('hidden');
         this.gameData.game.gameState.expelled = true;
     }
 
