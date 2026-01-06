@@ -425,9 +425,10 @@ class GameEngine {
                 sceneImage.src = 'assets/images/Dean1.png';
             }
         } else if (npcId === 'earthworm_jim') {
-            // Use Jim1 for intro
+            // Use Jim1 for intro greeting
             const sceneImage = document.getElementById('scene-image');
             sceneImage.src = 'assets/images/Jim1.png';
+            sceneImage.style.opacity = '1';
             // Clear action bubble immediately when switching to Jim1
             const actionBubbles = document.getElementById('action-bubbles');
             if (actionBubbles) {
@@ -594,9 +595,10 @@ class GameEngine {
                     sceneImage.src = 'assets/images/Dean3.png';
                     this.showSpeechBubble('Dean Cain', npc.responses.insult, 'left');
                     setTimeout(() => {
+                        this.cancelDialogue();
+                        // Show carback.png and game over screen
                         this.gameOver('Expelled from Console University', 'You insulted the Dean. Game over.');
                     }, 3000);
-                    this.cancelDialogue();
                     return;
                 }
 
@@ -684,21 +686,30 @@ class GameEngine {
         } else if (this.currentNPC === 'earthworm_jim') {
             // Jim's simplified flow - whatever user says, Jim responds with default response
             const sceneImage = document.getElementById('scene-image');
-            // Make sure Jim2 is shown (don't switch to quad yet)
-            sceneImage.src = 'assets/images/JIM2.png';
+            // Switch to Jim2.png when he says he was being nice
+            sceneImage.src = 'assets/images/Jim2.png';
+            sceneImage.style.opacity = '1';
+            sceneImage.style.transition = 'opacity 0.3s ease';
             
             // Show Jim's response
             this.showSpeechBubble('Earthworm Jim', npc.defaultResponse || 'Uh yeah I was just being nice but why don\'t you check out the frat.', 'left');
             
             setTimeout(() => {
                 this.cancelDialogue();
-                // Fade out Jim image, then show quad
+                // Fade out Jim2 image, then show quad
                 sceneImage.style.transition = 'opacity 0.5s ease-out';
                 sceneImage.style.opacity = '0';
                 setTimeout(() => {
                     // Switch to quad image
                     sceneImage.src = 'assets/images/Quad1.png';
-                    sceneImage.style.opacity = '1';
+                    // Wait for image to load, then fade in
+                    sceneImage.onload = () => {
+                        sceneImage.style.opacity = '1';
+                    };
+                    // Fallback if image is cached
+                    if (sceneImage.complete) {
+                        sceneImage.style.opacity = '1';
+                    }
                     sceneImage.style.transition = '';
                     
                     // Jim exits - remove from location
