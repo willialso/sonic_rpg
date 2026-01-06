@@ -120,10 +120,20 @@ class GameEngine {
     }
 
     startGame() {
-        document.getElementById('start-screen').classList.add('hidden');
+        const startScreen = document.getElementById('start-screen');
+        startScreen.classList.add('hidden');
+        startScreen.style.display = 'none';
+        startScreen.style.visibility = 'hidden';
+        // Hide FAB menu on welcome screen
+        const fabMenu = document.getElementById('floating-action-menu');
+        if (fabMenu) {
+            fabMenu.style.display = 'none';
+        }
         // Clear start screen image overlay
         const sceneOverlay = document.getElementById('scene-overlay');
-        sceneOverlay.style.display = 'none';
+        if (sceneOverlay) {
+            sceneOverlay.style.display = 'none';
+        }
         this.goToLocation('dean_office');
     }
 
