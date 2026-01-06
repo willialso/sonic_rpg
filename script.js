@@ -317,14 +317,29 @@ class GameEngine {
             fabOptions.appendChild(talkOption);
         }
 
-        // Special handling for Quad - only "Talk to Jim" and "Keep Walking"
+        // Special handling for Quad
         if (location.id === 'quad') {
-            const keepWalkingOption = this.createFABOption('Keep Walking', () => {
-                this.closeFABMenu();
-                // Show "Scene Coming Soon" for other locations
-                this.showActionBubble('Scene Coming Soon', 'Other areas are under construction.');
-            });
-            fabOptions.appendChild(keepWalkingOption);
+            // If Jim is gone, show "Go to Frat" and "Keep Walking"
+            if (!location.npc) {
+                const goToFratOption = this.createFABOption('Go to Frat', () => {
+                    this.closeFABMenu();
+                    this.showActionBubble('Scene Coming Soon', 'This location is under construction.');
+                });
+                fabOptions.appendChild(goToFratOption);
+                
+                const keepWalkingOption = this.createFABOption('Keep Walking', () => {
+                    this.closeFABMenu();
+                    this.showActionBubble('Scene Coming Soon', 'Other areas are under construction.');
+                });
+                fabOptions.appendChild(keepWalkingOption);
+            } else {
+                // Jim is still there - show "Talk to Jim" and "Keep Walking"
+                const keepWalkingOption = this.createFABOption('Keep Walking', () => {
+                    this.closeFABMenu();
+                    this.showActionBubble('Scene Coming Soon', 'Other areas are under construction.');
+                });
+                fabOptions.appendChild(keepWalkingOption);
+            }
             return; // Don't show other exits for quad
         }
 
