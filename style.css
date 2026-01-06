@@ -55,7 +55,7 @@ body {
 
 /* Scene Image - Takes up most of screen */
 #scene-image-container {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -129,7 +129,7 @@ body {
 
 /* NPC Portrait Container - Rectangle box in middle, top half of character */
 #npc-portrait-container {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -183,7 +183,7 @@ body {
 }
 
 #scene-overlay {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -217,7 +217,7 @@ body {
 }
 
 .speech-bubble {
-    position: absolute;
+    position: fixed;
     max-width: 85%;
     min-width: 250px;
     min-height: 120px;
@@ -233,7 +233,7 @@ body {
 
 .speech-bubble::before {
     content: '';
-    position: absolute;
+    position: fixed;
     width: 0;
     height: 0;
     border-style: solid;
@@ -257,7 +257,7 @@ body {
 
 .speech-bubble.left::after {
     content: '';
-    position: absolute;
+    position: fixed;
     right: 32px;
     top: -10px;
     border-width: 0 12px 12px 12px;
@@ -300,7 +300,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
 
 .speech-bubble.right::after {
     content: '';
-    position: absolute;
+    position: fixed;
     right: 32px;
     bottom: -10px;
     border-width: 12px 12px 0 12px;
@@ -324,7 +324,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
 
 .speech-bubble.center::after {
     content: '';
-    position: absolute;
+    position: fixed;
     left: 50%;
     transform: translateX(-50%);
     bottom: -10px;
@@ -416,7 +416,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
 
 /* Action Bubbles (Comic-style action text) */
 #action-bubbles {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -427,7 +427,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
 }
 
 .action-bubble {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-2deg);
@@ -545,7 +545,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
 }
 
 .fab-options {
-    position: absolute;
+    position: fixed;
     bottom: 80px;
     right: 0;
     display: flex;
@@ -832,7 +832,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
 
 /* Start Screen */
 .screen {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -981,7 +981,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
 }
 
 .modal-close {
-    position: absolute;
+    position: fixed;
     top: 15px;
     right: 15px;
     width: 40px;
