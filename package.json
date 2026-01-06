@@ -1,0 +1,16 @@
+{
+  "name": "sonic-rpg-v4",
+  "version": "1.0.0",
+  "description": "Sonic for Hire: Console University - Mobile-First RPG Game",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["game", "rpg", "sonic"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
+

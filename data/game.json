@@ -1,0 +1,114 @@
+{
+  "game": {
+    "playerName": "",
+    "currentLocation": "start",
+    "gameState": {
+      "hasName": false,
+      "talkedToDean": false,
+      "gotOrientation": false,
+      "talkedToJim": false,
+      "jimQuestionAnswered": false,
+      "jimWrongAnswers": 0,
+      "expelled": false
+    },
+    "locations": {
+      "start": {
+        "id": "start",
+        "name": "Welcome",
+        "image": "assets/images/Console.png",
+        "description": "Congratulations on your acceptance to Console University"
+      },
+      "dean_office": {
+        "id": "dean_office",
+        "name": "Dean's Office",
+        "image": "assets/images/Deanoff.png",
+        "description": "You're in the Dean's Office. Dean Cain sits behind his desk.",
+        "settingDescription": "You see Dean Cain behind his desk.",
+        "npc": "dean_cain",
+        "exits": ["quad"],
+        "requiresTalk": true
+      },
+      "quad": {
+        "id": "quad",
+        "name": "Quad",
+        "image": "assets/images/Quad1.png",
+        "description": "The campus quad. Students mill about.",
+        "settingDescription": "You see Earthworm Jim.",
+        "npc": "earthworm_jim",
+        "exits": []
+      },
+      "cafeteria": {
+        "id": "cafeteria",
+        "name": "Cafeteria",
+        "image": "assets/images/cafeteria.png",
+        "description": "The campus cafeteria.",
+        "exits": ["quad"]
+      },
+      "frat": {
+        "id": "frat",
+        "name": "Frat House",
+        "image": "assets/images/frat.png",
+        "description": "The fraternity house.",
+        "exits": ["quad"]
+      },
+      "classrooms": {
+        "id": "classrooms",
+        "name": "Classrooms",
+        "image": "assets/images/classrooms.png",
+        "description": "The classroom building.",
+        "exits": ["quad"]
+      },
+      "dorms": {
+        "id": "dorms",
+        "name": "Dorms",
+        "image": "assets/images/dorms.png",
+        "description": "The dormitory building.",
+        "exits": ["quad"]
+      },
+      "stadium": {
+        "id": "stadium",
+        "name": "Stadium",
+        "image": "assets/images/stadium.png",
+        "description": "The stadium.",
+        "exits": ["quad"]
+      }
+    },
+    "npcs": {
+      "dean_cain": {
+        "id": "dean_cain",
+        "name": "Dean Cain",
+        "portrait": "assets/images/Dean1.png",
+        "portraitExam": "assets/images/Dean2.png",
+        "portraitExpelled": "assets/images/Dean3.png",
+        "portraitOrientation": "assets/images/Dean4.png",
+        "greeting": "Glad you made it, what's your name chief?",
+        "responses": {
+          "name_given": "Nice to meet you {name}. All of us here at Console University are really happy to have...your tuition check. Here's your orientation schedule.",
+          "insult": "Well the world needs ditch diggers too!",
+          "nonsense": "Looks like somebody's not ready for college, better re-take the entrance exam"
+        },
+        "orientation": "Welcome {name},\n\nLook we'll cut to the chase, the only way this university stays open is if Sonic wins us a championship but he's a lazy irresponsible jerk so you need to figure out how to get him to the stadium, otherwise we're all screwed.\n\nNo one's been able to do this yet so you'll need to talk to other students, check out the campus, find whatever you can that might help. But on the plus side if it works out you'll know your way around!\n\nStay Gold,\nDean Cain"
+      },
+      "earthworm_jim": {
+        "id": "earthworm_jim",
+        "name": "Earthworm Jim",
+        "portrait": "assets/images/Jim1.png",
+        "portraitQuestion": "assets/images/JIM2.png",
+        "portraitBad": "assets/images/JIM3.png",
+        "greeting": "Hey new guy, what can I do you for?",
+        "responses": {
+          "question_about_sonic": "I'll help you out but if I scratch your back you need to scratch mine, metaphorically though I flake easily",
+          "what_do_i_need": "I can't remember what time the sorority has their lingerie pillow fight?",
+          "correct_answer": "I think sonic is sleeping one off.",
+          "wrong_answer_1": "Yeah that doesn't sound right",
+          "wrong_answer_2": "Hmm, that's not ringing a bell",
+          "wrong_answer_3": "You know what it's our first day, don't stress yourself too much, maybe you should try going to class",
+          "irrelevant": "Um yeah maybe check out the Frat. I'm gonna go this way.",
+          "mean": "Um yeah maybe check out the Frat. I'm gonna go this way."
+        },
+        "correctAnswer": "315"
+      }
+    }
+  }
+}
+

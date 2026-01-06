@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Sonic for Hire: Console University</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Main Game Container -->
+    <div id="game-container">
+        <!-- Background Image Display (takes up most of screen) -->
+        <div id="scene-image-container">
+            <img id="scene-image" src="" alt="Current Scene">
+            <div id="scene-overlay"></div>
+            <!-- NPC Portrait (shown when talking) -->
+            <div id="npc-portrait-container" class="hidden">
+                <img id="npc-portrait" src="" alt="NPC Portrait">
+            </div>
+        </div>
+
+        <!-- Speech Bubbles Container -->
+        <div id="speech-bubbles"></div>
+        
+        <!-- Speech Bubble Navigation -->
+        <div id="speech-navigation" class="hidden">
+            <button id="speech-prev" class="speech-nav-btn">←</button>
+            <span id="speech-counter">1 / 1</span>
+            <button id="speech-next" class="speech-nav-btn">→</button>
+        </div>
+
+        <!-- Action Bubble Container -->
+        <div id="action-bubbles"></div>
+
+        <!-- Floating Action Menu -->
+        <div id="floating-action-menu">
+            <button id="fab-main" class="fab-button" aria-label="Actions">
+                <span class="fab-icon">+</span>
+            </button>
+            <div id="fab-options" class="fab-options hidden">
+                <!-- Action buttons will be dynamically generated here -->
+            </div>
+        </div>
+
+        <!-- Dialogue Input Container (hidden by default) -->
+        <div id="dialogue-container" class="hidden">
+            <div id="dialogue-input-wrapper">
+                <input type="text" id="dialogue-input" placeholder="Type your response..." autocomplete="off">
+                <button id="dialogue-send">Send</button>
+                <button id="dialogue-cancel">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Orientation Modal -->
+        <div id="orientation-modal" class="modal hidden">
+            <div class="modal-content">
+                <button class="modal-close" aria-label="Close">&times;</button>
+                <img id="orientation-image" src="assets/images/orientation_schedule.png" alt="Orientation Schedule">
+                <div class="modal-actions">
+                    <button id="go-to-quad-btn" class="action-btn primary">Go to Quad</button>
+                    <button id="drop-out-btn" class="action-btn danger">Drop Out</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Start Screen (shown initially) -->
+        <div id="start-screen" class="screen active">
+            <div class="start-content">
+                <button id="enroll-btn" class="primary-btn">Enroll</button>
+            </div>
+        </div>
+
+        <!-- Game Over Screen (hidden by default) -->
+        <div id="game-over-screen" class="screen hidden">
+            <div class="game-over-content">
+                <h1 id="game-over-title">Game Over</h1>
+                <p id="game-over-message"></p>
+                <button id="restart-btn" class="primary-btn">Try Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
