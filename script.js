@@ -576,18 +576,27 @@ class GameEngine {
         if (this.currentNPC === 'dean_cain') {
             // Check if we're waiting for name
             if (!state.hasName) {
-                // Check for derogatory phrases and curse words
+                // FIRST: Check for insults, mean, angry, or disrespectful language - EXPEL
                 const derogatoryPhrases = ['bite me', 'screw you', 'fuck off', 'piss off', 'go to hell', 'drop dead', 
                                           'shut up', 'shut it', 'shut your', 'get lost', 'buzz off', 'piss on', 
-                                          'kiss my', 'kiss my ass', 'suck it', 'suck my', 'eat shit', 'eat me'];
+                                          'kiss my', 'kiss my ass', 'suck it', 'suck my', 'eat shit', 'eat me',
+                                          'fuck you', 'screw off', 'go away', 'leave me', 'i hate', 'i don\'t care',
+                                          'whatever', 'who cares', 'i don\'t want', 'no way', 'forget it'];
                 const curseWords = ['fuck', 'shit', 'damn', 'hell', 'ass', 'dipshit', 'jerk', 'idiot', 'stupid', 
-                                   'dumb', 'moron', 'bastard', 'bitch', 'crap', 'piss'];
-                const insults = ['stupid', 'idiot', 'dumb', 'suck', 'hate', 'screw', 'jerk'];
+                                   'dumb', 'moron', 'bastard', 'bitch', 'crap', 'piss', 'screw', 'suck'];
+                const angryWords = ['hate', 'angry', 'mad', 'pissed', 'annoyed', 'furious', 'disgusted', 'disgusting'];
+                const disrespectfulWords = ['whatever', 'who cares', 'so what', 'big deal', 'who cares', 'don\'t care'];
                 
                 const isDerogatory = derogatoryPhrases.some(phrase => textLower.includes(phrase)) ||
-                                    curseWords.some(word => textLower === word || textLower.includes(' ' + word + ' ') || 
-                                                          textLower.startsWith(word + ' ') || textLower.endsWith(' ' + word)) ||
-                                    insults.some(insult => textLower.includes(insult));
+                                    curseWords.some(word => {
+                                        // Check if word appears as standalone or in context
+                                        const wordRegex = new RegExp(`\\b${word}\\b`, 'i');
+                                        return wordRegex.test(textLower);
+                                    }) ||
+                                    angryWords.some(word => textLower.includes(word)) ||
+                                    disrespectfulWords.some(phrase => textLower.includes(phrase)) ||
+                                    textLower.includes('you\'re a') || textLower.includes('you are a') ||
+                                    textLower.includes('you suck') || textLower.includes('you\'re stupid');
 
                 if (isDerogatory) {
                     // Update scene image to expelled version (Dean3)
@@ -602,14 +611,16 @@ class GameEngine {
                     return;
                 }
 
-                // Check if it's a question
+                // SECOND: Check if it's a question - ENTRANCE EXAM
+                const questionWords = ['what', 'how', 'why', 'when', 'where', 'who', 'which', 'can', 'could', 'would', 'should', 'is', 'are', 'do', 'does', 'did'];
                 const isQuestion = textLower.includes('?') || 
-                                  textLower.startsWith('what') || textLower.startsWith('how') || 
-                                  textLower.startsWith('why') || textLower.startsWith('when') || 
-                                  textLower.startsWith('where') || textLower.startsWith('who') ||
-                                  textLower.includes('what ') || textLower.includes('how ') ||
-                                  textLower.includes('why ') || textLower.includes('when ') ||
-                                  textLower.includes('where ') || textLower.includes('who ');
+                                  questionWords.some(word => textLower.startsWith(word + ' ') || textLower.startsWith(word + '?')) ||
+                                  textLower.includes(' what ') || textLower.includes(' how ') ||
+                                  textLower.includes(' why ') || textLower.includes(' when ') ||
+                                  textLower.includes(' where ') || textLower.includes(' who ') ||
+                                  textLower.includes('can i') || textLower.includes('can you') ||
+                                  textLower.includes('what is') || textLower.includes('what are') ||
+                                  textLower.includes('how do') || textLower.includes('how can');
 
                 if (isQuestion) {
                     // Question - show exam scene (Dean2)
@@ -623,19 +634,28 @@ class GameEngine {
                     return;
                 }
 
-                // Check if it's a recognizable name
+                // THIRD: Check if it's a recognizable name (only if not insult/question)
                 // Names are typically 1-3 words, 2-30 characters, no special punctuation except hyphens/apostrophes
                 const isTooLong = text.length > 30;
                 const hasGameKeywords = textLower.includes('sonic') || textLower.includes('stadium') || 
-                                       textLower.includes('championship') || textLower.includes('mission');
+                                       textLower.includes('championship') || textLower.includes('mission') ||
+                                       textLower.includes('game') || textLower.includes('university');
                 const hasInvalidChars = /[!@#$%^&*()_+=\[\]{};:"\\|,.<>\/?]/.test(text);
                 const isCommand = textLower.startsWith('go ') || textLower.startsWith('talk ') || 
-                                 textLower.startsWith('enter ') || textLower.startsWith('exit ');
+                                 textLower.startsWith('enter ') || textLower.startsWith('exit ') ||
+                                 textLower.startsWith('i ') || textLower.startsWith('my ') ||
+                                 textLower.startsWith('the ') || textLower.startsWith('a ');
                 
                 // Common name patterns: First Last, First-Middle-Last, or single name
+                // Must be 2-30 chars, only letters, spaces, hyphens, apostrophes
                 const namePattern = /^[A-Za-z]+([\s'-][A-Za-z]+)*$/;
-                const looksLikeName = namePattern.test(text) && !isTooLong && !hasGameKeywords && 
-                                     !hasInvalidChars && !isCommand && text.length >= 2;
+                const isShortEnough = text.length >= 2 && text.length <= 30;
+                const hasOnlyNameChars = /^[A-Za-z\s'-]+$/.test(text);
+                const isNotCommonWord = !['yes', 'no', 'ok', 'okay', 'sure', 'maybe', 'hi', 'hello', 'hey', 'thanks', 'thank you'].includes(textLower);
+                
+                const looksLikeName = namePattern.test(text) && isShortEnough && hasOnlyNameChars &&
+                                     !isTooLong && !hasGameKeywords && !hasInvalidChars && 
+                                     !isCommand && isNotCommonWord;
 
                 if (looksLikeName) {
                     // Recognizable name - show orientation (Dean4)
