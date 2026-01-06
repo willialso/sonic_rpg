@@ -46,6 +46,11 @@ class GameEngine {
         document.getElementById('enroll-btn').addEventListener('click', () => {
             this.startGame();
         });
+        
+        // History button
+        document.getElementById('history-btn').addEventListener('click', () => {
+            this.showLastMessage();
+        });
 
         // Dialogue input
         document.getElementById('dialogue-input').addEventListener('keypress', (e) => {
@@ -800,16 +805,37 @@ class GameEngine {
     showSpeechBubble(speaker, text, position = 'left') {
         const container = document.getElementById('speech-bubbles');
         
-        // Track speech bubbles for this conversation
+        // Track speech bubbles for history
         if (!this.currentConversationBubbles) {
             this.currentConversationBubbles = [];
         }
         this.currentConversationBubbles.push({ speaker, text, position });
         this.currentSpeechIndex = this.currentConversationBubbles.length - 1;
         
-        // Create bubble
+        // Clear previous bubbles when new speaker talks or same speaker says new line
+        const existingBubbles = container.querySelectorAll('.speech-bubble');
+        existingBubbles.forEach(bubble => {
+            const existingSpeaker = bubble.querySelector('.speaker-name')?.textContent;
+            const existingPosition = bubble.classList.contains('left') ? 'left' : 'right';
+            
+            // Remove if different speaker OR same speaker saying new line
+            if (existingSpeaker !== speaker || existingPosition !== position) {
+                bubble.style.opacity = '0';
+                bubble.style.transform = 'scale(0.8)';
+                setTimeout(() => bubble.remove(), 300);
+            } else {
+                // Same speaker, new line - remove previous bubble
+                bubble.style.opacity = '0';
+                bubble.style.transform = 'scale(0.8)';
+                setTimeout(() => bubble.remove(), 300);
+            }
+        });
+        
+        // Create new bubble
         const bubble = document.createElement('div');
         bubble.className = `speech-bubble ${position}`;
+        bubble.style.opacity = '0';
+        bubble.style.transform = 'scale(0.8)';
         
         const speakerName = document.createElement('div');
         speakerName.className = 'speaker-name';
@@ -822,43 +848,14 @@ class GameEngine {
         bubble.appendChild(speakerName);
         bubble.appendChild(speechText);
         
-        // Add navigation buttons inside bubble if multiple bubbles for this speaker
-        const sameSpeakerBubbles = this.currentConversationBubbles.filter(b => b.speaker === speaker && b.position === position);
-        if (sameSpeakerBubbles.length > 1 && position === 'left') {
-            const navContainer = document.createElement('div');
-            navContainer.className = 'bubble-nav';
-            
-            const prevBtn = document.createElement('button');
-            prevBtn.className = 'bubble-nav-btn';
-            prevBtn.textContent = '←';
-            prevBtn.disabled = this.currentSpeechIndex === 0 || this.currentConversationBubbles[this.currentSpeechIndex - 1]?.speaker !== speaker;
-            prevBtn.onclick = (e) => {
-                e.stopPropagation();
-                if (this.currentSpeechIndex > 0) {
-                    this.currentSpeechIndex--;
-                    this.showCurrentBubble();
-                }
-            };
-            
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'bubble-nav-btn';
-            nextBtn.textContent = '→';
-            const nextIndex = this.currentSpeechIndex + 1;
-            nextBtn.disabled = nextIndex >= this.currentConversationBubbles.length || this.currentConversationBubbles[nextIndex]?.speaker !== speaker;
-            nextBtn.onclick = (e) => {
-                e.stopPropagation();
-                if (this.currentSpeechIndex < this.currentConversationBubbles.length - 1) {
-                    this.currentSpeechIndex++;
-                    this.showCurrentBubble();
-                }
-            };
-            
-            navContainer.appendChild(prevBtn);
-            navContainer.appendChild(nextBtn);
-            bubble.appendChild(navContainer);
-        }
-        
         container.appendChild(bubble);
+        
+        // Animate in
+        setTimeout(() => {
+            bubble.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            bubble.style.opacity = '1';
+            bubble.style.transform = 'scale(1)';
+        }, 50);
 
         // Adjust position if dialogue is visible (for user bubbles)
         if (position === 'right') {
@@ -870,19 +867,24 @@ class GameEngine {
                 bubble.style.bottom = isMobile ? '120px' : '140px';
             }
         }
-
-        // Keep user bubbles visible longer
-        if (position === 'right') {
-            setTimeout(() => {
-                // Don't auto-remove user bubbles
-            }, 5000);
-        }
-
-        // Remove old bubbles (keep last 3)
-        const bubbles = container.querySelectorAll('.speech-bubble');
-        if (bubbles.length > 3) {
-            bubbles[0].remove();
-        }
+        
+        // Auto-remove bubbles after delay (shorter on mobile)
+        const isMobile = window.innerWidth <= 480;
+        const delay = isMobile ? 3000 : 4000;
+        setTimeout(() => {
+            if (bubble.parentNode) {
+                bubble.style.opacity = '0';
+                bubble.style.transform = 'scale(0.8)';
+                setTimeout(() => {
+                    if (bubble.parentNode) {
+                        bubble.remove();
+                    }
+                }, 300);
+            }
+        }, delay);
+        
+        // Update history button
+        this.updateHistoryButton();
     }
 
     showCurrentBubble() {
@@ -907,6 +909,28 @@ class GameEngine {
         document.getElementById('speech-bubbles').innerHTML = '';
         this.currentConversationBubbles = [];
         this.currentSpeechIndex = 0;
+        this.updateHistoryButton();
+    }
+    
+    updateHistoryButton() {
+        const historyBtn = document.getElementById('history-btn');
+        if (this.currentConversationBubbles && this.currentConversationBubbles.length > 0) {
+            historyBtn.classList.remove('hidden');
+        } else {
+            historyBtn.classList.add('hidden');
+        }
+    }
+    
+    showLastMessage() {
+        if (!this.currentConversationBubbles || this.currentConversationBubbles.length === 0) return;
+        
+        const lastMessage = this.currentConversationBubbles[this.currentConversationBubbles.length - 1];
+        // Clear all bubbles and show last one
+        const container = document.getElementById('speech-bubbles');
+        container.innerHTML = '';
+        
+        // Show last message
+        this.showSpeechBubble(lastMessage.speaker, lastMessage.text, lastMessage.position);
     }
 
     cancelDialogue() {
@@ -958,6 +982,10 @@ class GameEngine {
     }
 
     gameOver(title, message) {
+        // Show carback.png image for expelled/dropped out
+        const sceneImage = document.getElementById('scene-image');
+        sceneImage.src = 'assets/images/carback.png';
+        
         document.getElementById('game-over-title').textContent = title;
         document.getElementById('game-over-message').textContent = message;
         document.getElementById('game-over-screen').classList.remove('hidden');

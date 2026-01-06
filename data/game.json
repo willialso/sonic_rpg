@@ -89,13 +89,14 @@
         },
         "orientation": "Welcome {name},\n\nLook we'll cut to the chase, the only way this university stays open is if Sonic wins us a championship but he's a lazy irresponsible jerk so you need to figure out how to get him to the stadium, otherwise we're all screwed.\n\nNo one's been able to do this yet so you'll need to talk to other students, check out the campus, find whatever you can that might help. But on the plus side if it works out you'll know your way around!\n\nStay Gold,\nDean Cain"
       },
-      "earthworm_jim": {
-        "id": "earthworm_jim",
-        "name": "Earthworm Jim",
-        "portrait": "assets/images/Jim1.png",
-        "portraitQuestion": "assets/images/JIM2.png",
-        "portraitBad": "assets/images/JIM3.png",
-        "greeting": "Hey new guy, what can I do you for?",
+          "earthworm_jim": {
+            "id": "earthworm_jim",
+            "name": "Earthworm Jim",
+            "portrait": "assets/images/Jim1.png",
+            "portraitQuestion": "assets/images/JIM2.png",
+            "portraitBad": "assets/images/JIM3.png",
+            "greeting": "Hey new guy, what can I do you for?",
+            "defaultResponse": "Uh yeah I was just being nice but why don't you check out the frat.",
         "responses": {
           "question_about_sonic": "I'll help you out but if I scratch your back you need to scratch mine, metaphorically though I flake easily",
           "what_do_i_need": "I can't remember what time the sorority has their lingerie pillow fight?",

@@ -1076,6 +1076,42 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
     }
 }
 
+/* History Button - Top Left */
+.history-btn {
+    position: fixed;
+    top: max(20px, env(safe-area-inset-top));
+    left: max(20px, env(safe-area-inset-left));
+    z-index: 20;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    border: 3px solid #fff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.history-btn:hover,
+.history-btn:active {
+    background: rgba(0, 0, 0, 0.9);
+    transform: scale(1.1);
+}
+
+.history-btn.hidden {
+    display: none;
+}
+
+.history-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
 /* Safe area support for notched devices */
 @supports (padding: max(0px)) {
     #dialogue-container,
