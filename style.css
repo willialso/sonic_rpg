@@ -878,17 +878,20 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
 }
 
 .start-content {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
     width: auto;
     max-width: none;
     background: transparent !important;
     border: none !important;
-    padding: 0 !important;
+    padding: 20px 0 !important;
     backdrop-filter: none !important;
     border-radius: 0 !important;
+    margin-top: auto;
+    margin-bottom: max(40px, env(safe-area-inset-bottom));
+    flex-shrink: 0;
 }
 
 .game-over-content h1 {
