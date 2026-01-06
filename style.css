@@ -1,5 +1,8 @@
 /* Modern Mobile-First Design - iPad/iPhone Style */
 
+/* Comic Font Import - Must be at top */
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -37,11 +40,13 @@ body {
 
 #game-container {
     width: 100%;
-    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile */
+    height: 100vh; /* Fallback for older browsers */
     position: relative;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* Scene Image - Takes up most of screen */
@@ -50,7 +55,8 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100dvh; /* Dynamic viewport height for mobile */
+    height: 100%; /* Fallback for older browsers */
     z-index: 1;
     background: var(--bg-dark);
 }
@@ -186,8 +192,7 @@ body {
     opacity: 0.5;
 }
 
-/* Comic Font Import */
-@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@400;700&display=swap');
+/* Comic Font Import moved to top of file */
 
 /* Speech Bubbles - Top Left/Right, Comic Style */
 #speech-bubbles {
@@ -596,6 +601,8 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
     backdrop-filter: blur(10px);
     padding: 20px 16px;
     padding-bottom: max(20px, env(safe-area-inset-bottom));
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
     border-top: 3px solid var(--primary-color);
     transform: translateY(100%);
     transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -735,6 +742,8 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
     #dialogue-container {
         padding: 16px 12px;
         padding-bottom: max(16px, env(safe-area-inset-bottom));
+        padding-left: max(12px, env(safe-area-inset-left));
+        padding-right: max(12px, env(safe-area-inset-right));
         min-height: 85px;
     }
     
@@ -748,6 +757,8 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
         font-size: 15px;
         flex: 1;
         min-width: 0;
+        -webkit-appearance: none;
+        appearance: none;
     }
     
     #dialogue-send {
@@ -763,7 +774,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
     }
     
     #speech-navigation {
-        right: 10px;
+        right: max(10px, env(safe-area-inset-right));
         padding: 10px 6px;
     }
     
@@ -771,6 +782,39 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
         width: 36px;
         height: 36px;
         font-size: 18px;
+    }
+    
+    #floating-action-menu {
+        right: max(20px, env(safe-area-inset-right));
+        bottom: max(80px, calc(80px + env(safe-area-inset-bottom)));
+    }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 360px) {
+    .speech-bubble {
+        max-width: 90%;
+        font-size: 15px;
+    }
+    
+    .speech-bubble .speaker-name {
+        font-size: 16px;
+    }
+    
+    .speech-bubble .speech-text {
+        font-size: 15px;
+    }
+    
+    #dialogue-input {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+    
+    #dialogue-send,
+    #dialogue-cancel {
+        font-size: 12px;
+        padding: 8px 12px;
+        min-width: 55px;
     }
 }
 
