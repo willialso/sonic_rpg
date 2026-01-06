@@ -27,13 +27,14 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Comic Neue', 'Comic Sans MS', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, cursive, sans-serif;
     background: var(--bg-dark);
     color: var(--text-primary);
     overflow: hidden;
     position: fixed;
     width: 100%;
-    height: 100%;
+    height: 100dvh; /* Dynamic viewport height for mobile */
+    height: 100%; /* Fallback for older browsers */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
