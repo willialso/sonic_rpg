@@ -27,26 +27,29 @@
 }
 
 body {
-    font-family: 'Comic Neue', 'Comic Sans MS', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, cursive, sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Neue', cursive, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: var(--bg-dark);
     color: var(--text-primary);
-    overflow: hidden;
+    overflow: auto;
+    overflow-x: hidden;
     position: fixed;
     width: 100%;
     height: 100dvh; /* Dynamic viewport height for mobile */
     height: 100%; /* Fallback for older browsers */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-overflow-scrolling: touch;
 }
 
 #game-container {
     width: 100%;
-    height: 100dvh; /* Dynamic viewport height for mobile */
-    height: 100vh; /* Fallback for older browsers */
+    min-height: 100dvh; /* Dynamic viewport height for mobile */
+    min-height: 100vh; /* Fallback for older browsers */
     position: relative;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -83,10 +86,12 @@ body {
     object-fit: contain;
     object-position: center;
     background: #000;
-    width: 70%;
-    height: 70%;
+    width: 85%;
+    height: auto;
     max-width: 500px;
-    max-height: 700px;
+    max-height: 60vh;
+    margin: auto;
+    margin-top: max(20px, env(safe-area-inset-top));
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
     filter: contrast(1.15) brightness(1.08) saturate(1.15);
@@ -197,7 +202,7 @@ body {
 
 /* Speech Bubbles - Top Left/Right, Comic Style */
 #speech-bubbles {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -205,6 +210,10 @@ body {
     z-index: 10;
     pointer-events: none;
     padding: 20px;
+    padding-top: max(20px, env(safe-area-inset-top));
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
 }
 
 .speech-bubble {
@@ -219,7 +228,7 @@ body {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(255, 255, 255, 0.5);
     animation: bubbleSlideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     pointer-events: auto;
-    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif;
 }
 
 .speech-bubble::before {
@@ -232,10 +241,11 @@ body {
 
 /* Character bubble - Top Right */
 .speech-bubble.left {
-    top: 20px;
-    right: 20px;
+    top: max(20px, env(safe-area-inset-top));
+    right: max(20px, env(safe-area-inset-right));
     left: auto;
     bottom: auto;
+    position: fixed;
 }
 
 .speech-bubble.left::before {
@@ -257,9 +267,10 @@ body {
 /* User bubble - Bottom Right */
 .speech-bubble.right {
     bottom: 140px;
-    right: 20px;
+    right: max(20px, env(safe-area-inset-right));
     top: auto;
     left: auto;
+    position: fixed;
 }
 
 /* Adjust user bubble when dialogue is visible */
@@ -322,7 +333,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
 }
 
 .speech-bubble .speaker-name {
-    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif;
     font-weight: 700;
     font-size: 18px;
     color: var(--primary-color);
@@ -332,7 +343,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
 }
 
 .speech-bubble .speech-text {
-    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif;
     font-size: 17px;
     font-weight: 400;
     line-height: 1.6;
@@ -363,7 +374,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
-    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif;
     padding: 0;
 }
 
@@ -444,7 +455,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
     text-transform: uppercase;
     letter-spacing: 2px;
     margin-bottom: 8px;
-    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif;
 }
 
 .action-bubble-setting {
@@ -456,7 +467,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
     margin-top: 8px;
     padding-top: 8px;
     border-top: 2px solid rgba(0, 0, 0, 0.3);
-    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif;
 }
 
 @keyframes bubbleAppear {
@@ -563,7 +574,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     white-space: nowrap;
     transition: all 0.2s ease;
-    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif;
     min-width: 120px;
     text-align: center;
     animation: fabOptionAppear 0.3s ease-out backwards;
@@ -631,7 +642,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
     border: 3px solid #000;
     border-radius: 50px;
     font-size: 16px;
-    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif;
     outline: none;
     transition: border-color 0.2s;
     -webkit-appearance: none;
@@ -651,7 +662,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
-    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif;
     white-space: nowrap;
     flex-shrink: 0;
     -webkit-appearance: none;
@@ -718,7 +729,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
-    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif;
 }
 
 .speech-nav-btn:active {
@@ -735,7 +746,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
     color: white;
     font-size: 12px;
     font-weight: 600;
-    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif;
 }
 
 /* Responsive adjustments for dialogue */
@@ -839,6 +850,16 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
 #start-screen {
     background: transparent;
     backdrop-filter: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: max(40px, env(safe-area-inset-bottom));
+    min-height: 100dvh;
+    min-height: 100vh;
 }
 
 .screen.hidden {
@@ -875,7 +896,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
     font-weight: 700;
     color: white;
     margin-bottom: 30px;
-    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
@@ -890,9 +911,11 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
     cursor: pointer;
     transition: all 0.2s;
     box-shadow: var(--shadow-lg);
-    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif;
     text-transform: uppercase;
     letter-spacing: 1px;
+    min-width: 200px;
+    margin-top: 20px;
 }
 
 .primary-btn:active {
@@ -1003,7 +1026,7 @@ body:has(#dialogue-container:not(.hidden)) #speech-bubbles .speech-bubble.right 
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
-    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
